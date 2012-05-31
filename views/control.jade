@@ -1,0 +1,63 @@
+iframe(src='/radio', width='30%', height='30%', frameBorder='0')
+div(id='control', style='float: right')
+  button(onClick='onAir()') On-Air
+  button(onClick='offAir()') Off-Air
+div
+  p New stream
+  p ID#: 
+    input(type='text', id='id-addr')
+  p Address: 
+    input(type='text', id='address')
+  p
+  button(onClick='addStream()') Add Stream
+
+div(id='feeds', style='width: 50%; float: left')
+input(type='text', id='address')
+script(src="/socket.io/socket.io.js")
+script
+  var streamDiv=document.getElementById('feeds');
+  var djDiv=document.getElementById('djs');
+  var socket = io.connect('/control');
+  var DJs=new Array();
+  var addrs=new Array();
+  function setStream(event){
+    var id=event.id;
+    var addr=event.addr;
+    addrs[id]=document.createElement('div');
+    var startButton=document.createElement('button');
+    var stopButton=document.createElement('button');
+    var infoImg=document.createElement('img');
+    var nameDiv=document.createElement('div');
+    var addressDiv=document.createElement('div');
+    startButton.setAttribute('onclick', 'startStream("'+id+'")');
+    stopButton.setAttribute('onclick', 'stopStream("'+id+'")');
+    startButton.innerHTML='Start';
+    stopButton.innerHTML='Stop';
+    infoImg.setAttribute('id','info');
+    infoImg.setAttribute('src','/images/off.gif');
+    addrs[id].appendChild(startButton);
+    addrs[id].appendChild(stopButton);
+    addrs[id].appendChild(infoImg);
+    streamDiv.appendChild(addrs[id]);
+  }
+
+  function addStream(){
+    var id = document.getElementById('id-addr').value;
+    var address = document.getElementById('address').value;
+    var json = {id:id, addr:address};
+    socket.emit('new stream', json);
+  }
+  function startStream(id){
+    socket.emit('start stream', id);
+  }
+  function stopStream(id){
+    socket.emit('stop stream', id);
+  }
+  function onAir(){
+    socket.emit('on air');
+  }
+  function offAir(){
+    socket.emit('off air');
+  }
+
+  socket.on('new stream',function(data){setStream(data)});

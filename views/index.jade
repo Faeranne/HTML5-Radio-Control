@@ -1,0 +1,27 @@
+iframe(src='radio', width='30%', height='30%', style='position:absolute;', frameBorder='0')
+iframe(id='content', src='http://projectmakeit.com/', onload='resize()', width='100%')
+script(src="/socket.io/socket.io.js")
+script
+  var socket = io.connect('/frames');
+  var content=document.getElementById('content');
+  function changeFrame(source){
+    content.src=source;
+  }
+  function resize() {
+    var height = document.documentElement.clientHeight;
+    height -= content.offsetTop;
+    
+    // not sure how to get this dynamically
+    height -= 11; /* whatever you set your body bottom margin/padding to be */
+    
+    content.style.height = height +"px";
+    
+  };
+  socket.on('new content', function(source){
+    content.src=source;
+  });
+  window.onresize = resize;
+  window.onbeforeunload = verifyLeave;
+  function verifyLeave(){
+    return "If you navagate away from this page, the radio will be turned off.  Are you sure?"
+  }

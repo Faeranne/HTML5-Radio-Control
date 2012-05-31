@@ -1,0 +1,42 @@
+img(id='live', style='float:left;', src='/images/off-air.gif', width='100', height='30');
+div(id='streams')
+div(id='links')
+script(src="/socket.io/socket.io.js")
+script
+  var socket = io.connect('/client');
+  var audio=new Array();
+  var DJName=new Array();
+  var sign=document.getElementById('live');
+  var streams = document.getElementById('streams');
+  var names = document.getElementById('names');
+  var links = document.getElementById('links');
+  var loadAvalible=true;
+  socket.on('on air',function(){
+    sign.src='/images/on-air.gif';
+  });
+  socket.on('off air',function(){
+    sign.src='/images/off-air.gif';
+  });
+  socket.on('start stream',function(x){
+    audio[x].load();
+    audio[x].play();
+  });
+  socket.on('stop stream',function(x){
+    audio[x].pause();
+  });
+  socket.on('link',function(source){
+    var link=document.createElement('a');
+    var txt = document.createTextNode(source);
+    link.appendChild(txt);
+    link.setAttribute('href',source);
+    link.setAttribute('target','_blank');
+    links.appendChild(link);
+  });
+  socket.on('new stream',function(stream){
+    var x=stream.id;
+    var source=stream.addr;
+    audio[x]=document.createElement('audio');
+    audio[x].src=source;
+    streams.appendChild(audio[x]);
+  });
+    

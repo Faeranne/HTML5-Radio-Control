@@ -68,6 +68,9 @@ var control = io.of('/control').on('connection', function (socket) {
   socket.on('off air', function(){
     client.emit('off air');
   });
+  socket.on('new content',function(addr){
+    client.emit('new content',addr);
+  });
 });
 
 

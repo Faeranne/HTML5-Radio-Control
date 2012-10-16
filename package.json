@@ -1,10 +1,17 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.5.8"
-    , "jade": ">= 0.0.1"
-    , "socket.io": ">= 0.0.1"
+  "name": "T3 Radio",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "2.5.8",
+    "jade": ">= 0.0.1",
+    "socket.io": ">= 0.0.1"
+  },
+  "subdomain": "t3Radio",
+  "scripts": {
+    "start": "app.js"
+  },
+  "engines": {
+    "node": "0.6.x"
   }
 }

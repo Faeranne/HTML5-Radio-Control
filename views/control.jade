@@ -13,6 +13,7 @@ div
 
 div(id='feeds', style='width: 50%; float: left')
 input(type='text', id='address')
+button(onclick='changeAddress()')
 script(src="/socket.io/socket.io.js")
 script
   var streamDiv=document.getElementById('feeds');
@@ -20,6 +21,9 @@ script
   var socket = io.connect('/control');
   var DJs=new Array();
   var addrs=new Array();
+  function changeAddress(){
+    var addr=document.getElementById('address');
+    socket.emit('new content',addr);
   function setStream(event){
     var id=event.id;
     var addr=event.addr;
